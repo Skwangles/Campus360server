@@ -1,0 +1,10 @@
+{
+  "name": "campus-virtual",
+  "version": "1.0.0",
+  "description": "Rebuild of David's Campus360 Project",
+  "main": "index.js",
+  "repository": "https://github.com/Skwangles/CampusVirtual.git",
+  "author": "Skwangles",
+  "license": "MIT",
+  "private": true
+}
