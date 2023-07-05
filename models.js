@@ -66,4 +66,4 @@ const Point = mongoose.model('Point', pointSchema);
 const Campus = mongoose.model('Campus', campusSchema);
 
 // Export the models
-module.exports = { Image, Point, Campus, PointType, Plan, LayoutImage, Room };
+module.exports = { Image, Point, Campus, PointType, LayoutImage, Room };

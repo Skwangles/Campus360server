@@ -9,9 +9,11 @@
   "private": true,
   "dependencies": {
     "express": "^4.18.2",
-    "mongoose": "^7.3.1"
+    "mongoose": "^7.3.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.3"
   },
   "scripts": {
-    "start": "npm run ./app/index.js"
+    "start": "node ./server.js"
   }
 }
