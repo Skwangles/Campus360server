@@ -347,7 +347,7 @@ router.delete('/layoutImages/:id', async (req, res) => {
     }
 });
 //#endregion
-//#region rooms
+//#region Rooms
 // Room routes
 router.post('/rooms', async (req, res) => {
     try {
