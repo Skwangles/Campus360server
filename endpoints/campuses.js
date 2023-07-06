@@ -9,7 +9,7 @@ router.post('/', async (req, res) => {
         await campus.save();
         res.status(201).json(campus);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 
@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
         const campuses = await Campus.find().exec();
         res.json(campuses);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 
@@ -32,7 +32,7 @@ router.get('/:id', async (req, res) => {
 
         res.json(campus);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 
@@ -47,7 +47,7 @@ router.patch('/:id', async (req, res) => {
 
         res.json(campus);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 
@@ -61,7 +61,7 @@ router.delete('/:id', async (req, res) => {
 
         res.sendStatus(204);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 

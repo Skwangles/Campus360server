@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
         await room.save();
         res.status(201).json(room);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 
@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
         const rooms = await Room.find().populate('points').exec();
         res.json(rooms);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 
@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
 
         res.json(room);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 
@@ -50,7 +50,7 @@ router.patch('/:id', async (req, res) => {
 
         res.json(room);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 
@@ -64,7 +64,7 @@ router.delete('/:id', async (req, res) => {
 
         res.sendStatus(204);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 

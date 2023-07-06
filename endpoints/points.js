@@ -9,7 +9,7 @@ router.post('/', async (req, res) => {
         await point.save();
         res.status(201).json(point);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 
@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
 
         res.json(points);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 
@@ -43,7 +43,7 @@ router.get('/:id', async (req, res) => {
 
         res.json(point);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 
@@ -67,7 +67,7 @@ router.patch('/:id', async (req, res) => {
 
         res.json(point);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 
@@ -81,7 +81,7 @@ router.delete('/:id', async (req, res) => {
 
         res.sendStatus(204);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 

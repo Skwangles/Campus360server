@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
         await image.save();
         res.status(201).json(image);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 
@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
         const images = await Image.find().exec();
         res.json(images);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 
@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
 
         res.json(image);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 
@@ -48,7 +48,7 @@ router.patch('/:id', async (req, res) => {
 
         res.json(image);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 
@@ -62,7 +62,7 @@ router.delete('/:id', async (req, res) => {
 
         res.sendStatus(204);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
 
