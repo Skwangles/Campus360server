@@ -10,7 +10,7 @@ const options = {
             description: 'API documentation for the Virtual Tour application',
         },
     },
-    apis: ['./routes.js'], // Specify the file(s) where your routes are defined
+    apis: ['./endpoints/areas.js', './endpoints/campuses.js', './endpoints/images.js', './endpoints/points.js', './endpoints/pointtypes.js', './endpoints/rooms.js'], // Specify the file(s) where your routes are defined
 };
 
 const specs = swaggerJSDoc(options);
