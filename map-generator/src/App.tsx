@@ -1,25 +1,22 @@
-import { useEffect, useMemo, useState } from 'react'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
+import CampusSelect from "./campusSelect";
+
+type Campus = {
+  name: string;
+};
 
 function App() {
-  const [campus, setCampus] = useState({})
-  const [campuses, setCampuses] = useState([])
-
-  useEffect(() => {
-    fetch('/campuses').then(async (response) => await response.json()).then(data => {
-      setCampuses(data)//untested structure
-    })
-  },[campus])
+  const [campus, setCampus] = useState<string | null>(null);
 
   return (
     <>
-      <select>
-        {campuses.map(campus => <option value={campus.name}></option>)}
-      </select>
-     <input type="text" placeholder='campus name...'></input>
-     <input type='button' >Create New</input>
+      <CampusSelect setCampus={setCampus} />
+
+      <input type="text" placeholder="campus name..."></input>
+      <input type="button">Create New</input>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
