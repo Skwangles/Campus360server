@@ -17,13 +17,25 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
   try {
-    const areas = await Area.find().exec();
+
+    const { name, campus } = req.query;
+    const query = {};
+
+    if (name) {
+      query.name = name;
+    }
+    if (campus) {
+      query.campus = campus;
+    }
+
+    const areas = await Area.find(query).exec();
     res.json(areas);
   } catch (error) {
     res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
   }
 });
 
+// GET /areas/:id
 router.get('/:id', async (req, res) => {
   try {
     const area = await Area.findById(req.params.id).exec();
@@ -38,7 +50,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-
+// PATCH /areas/:id
 router.patch('/:id', async (req, res) => {
   try {
     const { name, base64 } = req.body;
@@ -54,7 +66,7 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
-
+// DELETE /areas/:id
 router.delete('/:id', async (req, res) => {
   try {
     const area = await Area.findByIdAndDelete(req.params.id).exec();
@@ -68,5 +80,3 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
   }
 });
-
-module.exports = router;

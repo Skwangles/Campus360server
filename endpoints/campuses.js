@@ -15,7 +15,14 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
     try {
-        const campuses = await Campus.find().exec();
+        const { name } = req.query;
+        const query = {};
+
+        if (name) {
+            query.name = name;
+        }
+
+        const campuses = await Campus.find(query).exec();
         res.json(campuses);
     } catch (error) {
         res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
