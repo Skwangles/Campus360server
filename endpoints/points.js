@@ -15,10 +15,29 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
     try {
-        const points = await Point.find()
+        const { image, type, area, campus } = req.query;
+        const query = {};
+
+        if (image) {
+            query.image = image
+        }
+
+        if (type) {
+            query.type = type
+        }
+
+        if (area) {
+            query.area = area;
+        }
+
+        if (campus) {
+            query.campus = campus;
+        }
+
+        const points = await Point.find(query)
             .populate('image')
             .populate('type')
-            .populate('layout_image')
+            .populate('area')
             .populate('campus')
             .exec();
 
@@ -33,7 +52,7 @@ router.get('/:id', async (req, res) => {
         const point = await Point.findById(req.params.id)
             .populate('image')
             .populate('type')
-            .populate('layout_image')
+            .populate('area')
             .populate('campus')
             .exec();
 
@@ -57,7 +76,7 @@ router.patch('/:id', async (req, res) => {
         )
             .populate('image')
             .populate('type')
-            .populate('layout_image')
+            .populate('area')
             .populate('campus')
             .exec();
 
