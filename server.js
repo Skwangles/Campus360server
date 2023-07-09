@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const connectDB = require('./db');
 const routes = require('./routes');
 const { serveSwaggerUI, setupSwaggerUI } = require('./swagger');
@@ -6,6 +7,7 @@ const { serveSwaggerUI, setupSwaggerUI } = require('./swagger');
 // Create Express app
 const app = express();
 
+app.use(cors())
 // Connect to the database
 connectDB();
 
