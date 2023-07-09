@@ -46,6 +46,7 @@ const imageSchema = new mongoose.Schema({
 
 const areaSchema = new mongoose.Schema({
   name: { type: String, required: true },
+  campus: { type: mongoose.Schema.Types.ObjectId, ref: "Campus" },
   base64: { type: String, required: true },
 });
 
