@@ -4,6 +4,7 @@ import CampusSelect from "./CampusSelect";
 import AreaSelect from "./AreaSelect";
 import AreaView from "./AreaView";
 
+const API = "http://localhost:3000";
 interface Campus {
   _id: string;
   name: string;
@@ -33,7 +34,7 @@ function App() {
   // Fetch campuses from the server
   useEffect(() => {
     axios
-      .get("/api/campuses")
+      .get(`${API}/campuses`)
       .then((response) => {
         setCampuses(response.data);
       })
@@ -46,7 +47,7 @@ function App() {
   useEffect(() => {
     if (selectedCampus) {
       axios
-        .get(`/api/areas?campus=${selectedCampus}`)
+        .get(`${API}/areas?campus=${selectedCampus}`)
         .then((response) => {
           setAreas(response.data);
         })
@@ -60,7 +61,7 @@ function App() {
   useEffect(() => {
     if (selectedArea) {
       axios
-        .get(`/api/points?area=${selectedArea}`)
+        .get(`${API}/points?area=${selectedArea}`)
         .then((response) => {
           setPoints(response.data);
         })
@@ -69,7 +70,7 @@ function App() {
         });
 
       axios
-        .get(`/api/areas/${selectedArea}`)
+        .get(`${API}/areas/${selectedArea}`)
         .then((response) => {
           setSelectedImage(response.data.base64);
         })
@@ -93,7 +94,7 @@ function App() {
     const campusName = prompt("Enter campus name:");
     if (campusName) {
       axios
-        .post("/api/campuses", { name: campusName })
+        .post(`${API}/campuses`, { name: campusName })
         .then((response) => {
           setCampuses([...campuses, response.data]);
         })
@@ -107,7 +108,7 @@ function App() {
     const areaName = prompt("Enter area name:");
     if (areaName && selectedCampus) {
       axios
-        .post("/api/areas", { name: areaName, campus: selectedCampus })
+        .post(`${API}/areas`, { name: areaName, campus: selectedCampus })
         .then((response) => {
           setAreas([...areas, response.data]);
         })
