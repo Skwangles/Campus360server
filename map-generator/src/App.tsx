@@ -127,12 +127,14 @@ function App() {
         onSelectCampus={handleCampusChange}
         onCreateCampus={handleCreateCampus}
       />
-      <AreaSelect
-        areas={areas}
-        selectedArea={selectedArea}
-        onSelectArea={handleAreaChange}
-        onCreateArea={handleCreateArea}
-      />
+      {selectedCampus && (
+        <AreaSelect
+          areas={areas}
+          selectedArea={selectedArea}
+          onSelectArea={handleAreaChange}
+          onCreateArea={handleCreateArea}
+        />
+      )}
       {selectedImage && (
         <AreaView
           area={{
