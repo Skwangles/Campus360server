@@ -1,37 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent } from "react";
 
-type Campus = {
+interface Campus {
   _id: string;
   name: string;
-};
+}
 
-type CampusSelectProps = {
-  setCampus: (campusId: string) => void;
-};
+interface CampusSelectProps {
+  campuses: Campus[];
+  selectedCampus: string;
+  onSelectCampus: (campusId: string) => void;
+  onCreateCampus: () => void;
+}
 
-const CampusSelect = ({ setCampus }: CampusSelectProps) => {
-  const [campuses, setCampuses] = useState<Campus[]>([]);
-
-  useEffect(() => {
-    fetch("/campuses") // Assuming the API endpoint is available at the root path
-      .then((response) => response.json())
-      .then((data: Campus[]) => setCampuses(data))
-      .catch((error) => console.error("Error fetching campuses:", error));
-  }, []);
-
-  const handleCampusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const campusId = event.target.value;
-    setCampus(campusId);
+const CampusSelect: React.FC<CampusSelectProps> = ({
+  campuses,
+  selectedCampus,
+  onSelectCampus,
+  onCreateCampus,
+}) => {
+  const handleCampusChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    onSelectCampus(e.target.value);
   };
 
   return (
-    <select onChange={handleCampusChange}>
-      {campuses.map((campus) => (
-        <option key={campus._id} value={campus._id}>
-          {campus.name}
-        </option>
-      ))}
-    </select>
+    <div>
+      <select value={selectedCampus} onChange={handleCampusChange}>
+        <option value="">Select a campus</option>
+        {campuses.map((campus) => (
+          <option key={campus._id} value={campus._id}>
+            {campus.name}
+          </option>
+        ))}
+      </select>
+      <button onClick={onCreateCampus}>Create Campus</button>
+    </div>
   );
 };
 
