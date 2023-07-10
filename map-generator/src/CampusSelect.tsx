@@ -1,10 +1,5 @@
 import React, { ChangeEvent } from "react";
 
-interface Campus {
-  _id: string;
-  name: string;
-}
-
 interface CampusSelectProps {
   campuses: Campus[];
   selectedCampus: string;
