@@ -54,7 +54,9 @@ const AreaSelect: React.FC<AreaSelectProps> = ({
         value={areaName}
         onChange={(e) => setAreaName(e.target.value)}
       />
-      <button onClick={handleCreateArea}>Create Area</button>
+      <button onClick={handleCreateArea}
+      // TODO: Test it actually creates
+      >Create Area</button>
     </div>
   );
 };

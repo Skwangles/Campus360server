@@ -5,7 +5,7 @@ import AreaSelect from "./AreaSelect";
 import AreaView from "./AreaView";
 
 const API = "http://localhost:3000";
-
+//TODO: Add CSS/Styling to whole thing
 function App() {
   const [campuses, setCampuses] = useState<Campus[]>([]);
   const [selectedCampus, setSelectedCampus] = useState<string>("");
@@ -55,6 +55,8 @@ function App() {
       axios
         .get(`${API}/areas/${selectedArea}`)
         .then((response) => {
+          console.log("Getting image!")
+          console.log(response.data)
           setSelectedImage(response.data.image);
         })
         .catch((error) => {

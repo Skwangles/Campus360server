@@ -13,6 +13,9 @@ db.createUser(
         ]
     }
 );
+//TODO: Default Types
+//TODO: Default campus
+//TODO: Default Areas
 
 // Insert initial data
 db.pointtypes.insertOne({ type: 'Normal'});

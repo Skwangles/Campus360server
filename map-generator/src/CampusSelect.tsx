@@ -27,7 +27,9 @@ const CampusSelect: React.FC<CampusSelectProps> = ({
           </option>
         ))}
       </select>
-      <button onClick={onCreateCampus}>Create Campus</button>
+      <button onClick={onCreateCampus}
+      //TODO: Test it actually creates
+      >Create Campus</button>
     </div>
   );
 };

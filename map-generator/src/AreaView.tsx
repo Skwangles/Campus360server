@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 interface Props {
   area: Area;
@@ -82,15 +82,8 @@ function AreaView({ area, points, onCreatePoint }: Props) {
         </div>
       ))}
 
-      {creatingPoint && pointCoordinates && (
+      {creatingPoint && pointCoordinates && ( // TODO: Add labels to each field
         <div>
-          <input
-            type="text"
-            name="image"
-            value={newPointData.image?.base64 || area.image?.base64}
-            onChange={handleInputChange}
-            placeholder="Image (base64)"
-          />
           <input
             type="number"
             name="pan_offset"
@@ -108,7 +101,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
           <input
             type="text"
             name="type"
-            value={newPointData.type?.name || ''}
+            value={newPointData.type?.name || ''} // TODO: Drop down select types from database types
             onChange={handleInputChange}
             placeholder="Type"
           />
@@ -127,7 +120,9 @@ function AreaView({ area, points, onCreatePoint }: Props) {
             placeholder="Y"
           />
           <input type="file" accept="image/*" onChange={handleImageUpload} />
-          <button onClick={handleCreatePoint}>Create Point</button>
+          <button onClick={handleCreatePoint}
+          //TODO: Test actually creates
+          >Create Point</button> 
         </div>
       )}
 
