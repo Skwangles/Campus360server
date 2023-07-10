@@ -1,10 +1,10 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useState } from "react";
 
 interface AreaSelectProps {
   areas: Area[];
   selectedArea: string;
   onSelectArea: (areaId: string) => void;
-  onCreateArea: () => void;
+  onCreateArea: (name: string, image: string) => void;
 }
 
 const AreaSelect: React.FC<AreaSelectProps> = ({
@@ -13,8 +13,28 @@ const AreaSelect: React.FC<AreaSelectProps> = ({
   onSelectArea,
   onCreateArea,
 }) => {
+  const [areaName, setAreaName] = useState("");
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
   const handleAreaChange = (e: ChangeEvent<HTMLSelectElement>) => {
     onSelectArea(e.target.value);
+  };
+
+  const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setSelectedImage(e.target.files[0]);
+    }
+  };
+
+  const handleCreateArea = () => {
+    if (selectedImage) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64Image = event.target?.result as string;
+        onCreateArea(areaName, base64Image);
+      };
+      reader.readAsDataURL(selectedImage);
+    }
   };
 
   return (
@@ -27,7 +47,14 @@ const AreaSelect: React.FC<AreaSelectProps> = ({
           </option>
         ))}
       </select>
-      <button onClick={onCreateArea}>Create Area</button>
+      <input type="file" accept="image/*" onChange={handleImageUpload} />
+      <input
+        type="text"
+        placeholder="Area Name"
+        value={areaName}
+        onChange={(e) => setAreaName(e.target.value)}
+      />
+      <button onClick={handleCreateArea}>Create Area</button>
     </div>
   );
 };
