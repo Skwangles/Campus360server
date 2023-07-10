@@ -5,8 +5,8 @@ const { Image, Point, Campus, PointType, Area, Room } = require('../models');
 
 router.post('/', async (req, res) => {
   try {
-    const { name, base64 } = req.body;
-    const area = new Area({ name, base64 });
+    const { name, image } = req.body;
+    const area = new Area({ name, image });
     await area.save();
     res.status(201).json(area);
   } catch (error) {
@@ -38,7 +38,7 @@ router.get('/', async (req, res) => {
 // GET /areas/:id
 router.get('/:id', async (req, res) => {
   try {
-    const area = await Area.findById(req.params.id).exec();
+    const area = await Area.findById(req.params.id).populate('image').exec();
 
     if (!area) {
       return res.status(404).json({ error: 'Area not found' });
@@ -54,7 +54,7 @@ router.get('/:id', async (req, res) => {
 router.patch('/:id', async (req, res) => {
   try {
     const { name, base64 } = req.body;
-    const area = await Area.findByIdAndUpdate(req.params.id, { name, base64 }, { new: true }).exec();
+    const area = await Area.findByIdAndUpdate(req.params.id, { name, image }, { new: true }).exec();
 
     if (!area) {
       return res.status(404).json({ error: 'Area not found' });
