@@ -23,7 +23,6 @@ mongoose.connect('mongodb://localhost:27017/virtualtour', {
  */
 
 const imageSchema = new mongoose.Schema({
-  name: { type: String, required: true },
   base64: { type: String, required: true },
 });
 
@@ -46,8 +45,8 @@ const imageSchema = new mongoose.Schema({
 
 const areaSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  campus: { type: mongoose.Schema.Types.ObjectId, ref: "Campus" },
-  base64: { type: String, required: true },
+  campus: { type: mongoose.Schema.Types.ObjectId, ref: "Campus", required: true },
+  image: { type: mongoose.Schema.Types.ObjectId, ref: "Image", required: true},
 });
 
 
