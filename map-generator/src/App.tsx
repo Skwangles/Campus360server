@@ -87,19 +87,43 @@ function App() {
     }
   };
 
-  const handleCreateArea = () => {
-    const areaName = prompt("Enter area name:");
-    if (areaName && selectedCampus) {
-      axios
-        .post(`${API}/areas`, { name: areaName, campus: selectedCampus })
-        .then((response) => {
-          setAreas([...areas, response.data]);
-        })
-        .catch((error) => {
-          console.error("Error creating area:", error);
-        });
-    }
+  const handleCreateArea = (name:string, image:string) => {
+    // Create the Image object
+    const newImage = {
+      base64: image,
+    };
+  
+    // Create the Image first
+    axios
+      .post("/images", newImage)
+      .then((imageResponse) => {
+        // Get the created Image's _id
+        const imageId = imageResponse.data._id;
+  
+        // Create the Area object with the correct image UUID
+        const newArea = {
+          name: name,
+          image: imageId,
+        };
+  
+        // Create the Area
+        axios
+          .post("/areas", newArea)
+          .then((areaResponse) => {
+            // Handle successful creation of the area
+            console.log("Area created:", areaResponse.data);
+          })
+          .catch((error) => {
+            // Handle error while creating the area
+            console.error("Error creating area:", error);
+          });
+      })
+      .catch((error) => {
+        // Handle error while creating the image
+        console.error("Error creating image:", error);
+      });
   };
+  
 
   const onCreatePoint = (point: Partial<Point>, img:string): void => {
     // Create the Image object
