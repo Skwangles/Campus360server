@@ -22,6 +22,13 @@ function AreaView({ area, points, onCreatePoint }: Props) {
       setNewPointData({ ...newPointData, x, y });
     }
   };
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
+  const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setSelectedImage(e.target.files[0]);
+    }
+  };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -36,7 +43,15 @@ function AreaView({ area, points, onCreatePoint }: Props) {
   };
 
   const handleCreatePoint = () => {
-    onCreatePoint(newPointData);
+    if (selectedImage) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64Image = event.target?.result as string;
+        onCreatePoint(newPointData, base64Image);
+      };
+      reader.readAsDataURL(selectedImage);
+    }
+    
     setCreatingPoint(false);
     setPointCoordinates(null);
     setNewPointData({});
@@ -93,7 +108,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
           <input
             type="text"
             name="type"
-            value={newPointData.type || ''}
+            value={newPointData.type?.name || ''}
             onChange={handleInputChange}
             placeholder="Type"
           />
@@ -111,6 +126,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
             onChange={handleInputChange}
             placeholder="Y"
           />
+          <input type="file" accept="image/*" onChange={handleImageUpload} />
           <button onClick={handleCreatePoint}>Create Point</button>
         </div>
       )}
