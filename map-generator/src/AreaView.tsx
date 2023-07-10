@@ -24,8 +24,9 @@ const AreaView: React.FC<AreaViewProps> = ({ area, points }) => {
   $("#map").on("click", function (e) {
     // e = Mouse click event.
     const rect = e.target.getBoundingClientRect();
-    const x = e.clientX - rect.left; //x position within the element.
-    const y = e.clientY - rect.top; //y position within the element.
+
+    const x = (e.clientX - rect.left) / rect.width; //x position within the elemen % of width
+    const y = (e.clientY - rect.top) / rect.height; //y position within the element % of height
   });
 
   return (
