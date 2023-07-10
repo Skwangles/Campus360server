@@ -1,10 +1,5 @@
 import React, { ChangeEvent } from "react";
 
-interface Area {
-  _id: string;
-  name: string;
-}
-
 interface AreaSelectProps {
   areas: Area[];
   selectedArea: string;

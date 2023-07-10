@@ -5,23 +5,6 @@ import AreaSelect from "./AreaSelect";
 import AreaView from "./AreaView";
 
 const API = "http://localhost:3000";
-interface Campus {
-  _id: string;
-  name: string;
-}
-
-interface Area {
-  _id: string;
-  name: string;
-  base64: string;
-}
-
-interface Point {
-  _id: string;
-  type: string;
-  x: number;
-  y: number;
-}
 
 function App() {
   const [campuses, setCampuses] = useState<Campus[]>([]);
@@ -29,7 +12,7 @@ function App() {
   const [areas, setAreas] = useState<Area[]>([]);
   const [selectedArea, setSelectedArea] = useState<string>("");
   const [points, setPoints] = useState<Point[]>([]);
-  const [selectedImage, setSelectedImage] = useState<string>("");
+  const [selectedImage, setSelectedImage] = useState<Image|null>(null);
 
   // Fetch campuses from the server
   useEffect(() => {
@@ -72,7 +55,7 @@ function App() {
       axios
         .get(`${API}/areas/${selectedArea}`)
         .then((response) => {
-          setSelectedImage(response.data.base64);
+          setSelectedImage(response.data.image);
         })
         .catch((error) => {
           console.error("Error fetching area:", error);
@@ -83,7 +66,7 @@ function App() {
   const handleCampusChange = (campusId: string) => {
     setSelectedCampus(campusId);
     setSelectedArea("");
-    setSelectedImage("");
+    setSelectedImage(null);
   };
 
   const handleAreaChange = (areaId: string) => {
@@ -118,6 +101,48 @@ function App() {
     }
   };
 
+  const onCreatePoint = (point: Partial<Point>, img:string): void => {
+    // Create the Image object
+    const newImage = {
+      base64: img,
+    };
+  
+    // Create the Point object
+    const newPoint: any = {
+      ...point,
+      campus: selectedCampus, //Ignore error
+      area: selectedArea,
+    };
+  
+    // Create the Image first
+    axios
+      .post('/images', newImage)
+      .then((imageResponse) => {
+        // Get the created Image's _id
+        const imageId = imageResponse.data._id;
+  
+        // Assign the Image _id to the Point's image attribute
+        newPoint.image = imageId;
+  
+        // Create the Point
+        axios
+          .post('/point', newPoint)
+          .then((pointResponse) => {
+            // Handle successful creation of the point
+            console.log('Point created:', pointResponse.data);
+          })
+          .catch((error) => {
+            // Handle error while creating the point
+            console.error('Error creating point:', error);
+          });
+      })
+      .catch((error) => {
+        // Handle error while creating the image
+        console.error('Error creating image:', error);
+      });
+  };
+  
+
   return (
     <div>
       <h1>Virtual Tour</h1>
@@ -140,8 +165,9 @@ function App() {
           area={{
             _id: selectedArea,
             name: selectedArea,
-            base64: selectedImage,
+            image: selectedImage,
           }}
+          onCreatePoint={onCreatePoint}
           points={points}
         />
       )}
