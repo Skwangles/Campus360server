@@ -4,8 +4,38 @@ const { Image, Point, Campus, PointType, Area, Room } = require('../models');
 
 router.post('/', async (req, res) => {
     try {
-        const { imageId, pan_offset, tilt_offset, typeId, links, x, y, layout_imageId, campusId } = req.body;
-        const point = new Point({ image: imageId, pan_offset, tilt_offset, type: typeId, links, x, y, layout_image: layout_imageId, campus: campusId });
+        const { pan_offset, tilt_offset, type, links, x, y, image, campus, area } = req.body;
+        const createFields = {};
+
+        if (image) {
+            createFields.image = image;
+        }
+        if (pan_offset) {
+            createFields.pan_offset = pan_offset;
+        }
+        if (tilt_offset) {
+            createFields.tilt_offset = tilt_offset;
+        }
+        if (typeId) {
+            createFields.type = type;
+        }
+        if (links) {
+            createFields.links = links;
+        }
+        if (x) {
+            createFields.x = x;
+        }
+        if (y) {
+            createFields.y = y;
+        }
+        if (area) {
+            createFields.image = area;
+        }
+        if (campus) {
+            createFields.campus = campusId;
+        }
+
+        const point = new Point(createFields);
         await point.save();
         res.status(201).json(point);
     } catch (error) {
