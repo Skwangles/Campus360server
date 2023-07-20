@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-
+import { API } from "./constants";
 interface Props {
   area: Area;
   points: Point[];
@@ -13,8 +13,18 @@ function AreaView({ area, points, onCreatePoint }: Props) {
     x: number;
     y: number;
   } | null>(null);
-  const [newPointData, setNewPointData] = useState<Partial<Point>>({});
+  const [newPointData, setNewPointData] = useState<Partial<Point>>({}); // Default values are handled by mongoose
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [pointTypes, setPointTypes] = useState<PointType[]>([]); // State to store the fetched pointTypes
   const imageRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    // Fetch the list of pointTypes when the component mounts
+    fetch(`${API}/pointTypes`) // Replace this URL with your server's API endpoint to fetch pointTypes
+      .then((response) => response.json())
+      .then((data) => setPointTypes(data))
+      .catch((error) => console.error("Error fetching pointTypes:", error));
+  }, []);
 
   const handleImageClick = (event: React.MouseEvent<HTMLImageElement>) => {
     if (creatingPoint && imageRef.current) {
@@ -25,7 +35,6 @@ function AreaView({ area, points, onCreatePoint }: Props) {
       setNewPointData({ ...newPointData, x, y });
     }
   };
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -58,6 +67,27 @@ function AreaView({ area, points, onCreatePoint }: Props) {
     setCreatingPoint(false);
     setPointCoordinates(null);
     setNewPointData({});
+  };
+
+  // Render the dropdown select element for pointTypes
+  const renderPointTypeSelect = () => {
+    return (
+      <div>
+        <div>Point Types</div>
+        <select
+          name="type"
+          value={newPointData.type?.toString() || ""} // Use .toString() to compare ObjectId with string
+          onChange={handleInputChange}
+        >
+          <option value="">Select PointType</option>
+          {pointTypes.map((pointType) => (
+            <option key={pointType._id} value={pointType._id}>
+              {pointType.name}
+            </option>
+          ))}
+        </select>
+      </div>
+    );
   };
 
   return (
@@ -138,14 +168,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
             onChange={handleInputChange}
             placeholder="Tilt Offset"
           />
-          <div>Zoom Offset</div>
-          <input
-            type="text"
-            name="type"
-            value={newPointData.type?.name || ""} // TODO: Drop down select types from database types
-            onChange={handleInputChange}
-            placeholder="Type"
-          />
+          {renderPointTypeSelect()} {/* Render the dropdown select element */}
           <div>Coordinates</div>
           <div>
             <div>X (%)</div>
