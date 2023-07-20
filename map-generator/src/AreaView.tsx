@@ -98,7 +98,10 @@ function AreaView({ area, points, onCreatePoint }: Props) {
         alt={area.name}
         onClick={handleImageClick}
         onLoad={handleImageLoad}
-        style={{ cursor: creatingPoint ? "crosshair" : "auto" }}
+        style={{
+          cursor: creatingPoint ? "crosshair" : "auto",
+          maxHeight: "80vh",
+        }}
         ref={imageRef}
       />
 
