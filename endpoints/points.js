@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
         if (tilt_offset) {
             createFields.tilt_offset = tilt_offset;
         }
-        if (typeId) {
+        if (type) {
             createFields.type = type;
         }
         if (links) {
@@ -29,11 +29,12 @@ router.post('/', async (req, res) => {
             createFields.y = y;
         }
         if (area) {
-            createFields.image = area;
+            createFields.area = area;
         }
         if (campus) {
-            createFields.campus = campusId;
+            createFields.campus = campus;
         }
+
 
         const point = new Point(createFields);
         await point.save();
