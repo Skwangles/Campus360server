@@ -3,8 +3,8 @@ import axios from "axios";
 import CampusSelect from "./CampusSelect";
 import AreaSelect from "./AreaSelect";
 import AreaView from "./AreaView";
+import { API } from "./constants";
 
-const API = "http://localhost:3000";
 //TODO: Add CSS/Styling to whole thing
 function App() {
   const [campuses, setCampuses] = useState<Campus[]>([]);
@@ -180,7 +180,7 @@ function App() {
 
         // Create the Point
         axios
-          .post("/point", newPoint)
+          .post(`${API}/points`, newPoint)
           .then((pointResponse) => {
             // Handle successful creation of the point
             console.log("Point created:", pointResponse.data);
