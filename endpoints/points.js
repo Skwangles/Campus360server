@@ -44,6 +44,25 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.get('/:id', async (req, res) => {
+    try {
+        const point = await Point.findById(req.params.id)
+            .populate('image')
+            .populate('type')
+            .populate('area')
+            .populate('campus')
+            .exec();
+
+        if (!point) {
+            return res.status(404).json({ error: 'Point not found' });
+        }
+
+        res.json(point);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
+    }
+});
+
 router.get('/', async (req, res) => {
     try {
         const { image, type, area, campus } = req.query;
@@ -78,24 +97,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:id', async (req, res) => {
-    try {
-        const point = await Point.findById(req.params.id)
-            .populate('image')
-            .populate('type')
-            .populate('area')
-            .populate('campus')
-            .exec();
 
-        if (!point) {
-            return res.status(404).json({ error: 'Point not found' });
-        }
-
-        res.json(point);
-    } catch (error) {
-        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
-    }
-});
 
 router.patch('/:id', async (req, res) => {
     try {

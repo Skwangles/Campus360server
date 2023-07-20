@@ -13,15 +13,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.get('/', async (req, res) => {
-    try {
-        const pointTypes = await PointType.find().exec();
-        res.json(pointTypes);
-    } catch (error) {
-        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
-    }
-});
-
 router.get('/:id', async (req, res) => {
     try {
         const pointType = await PointType.findById(req.params.id).exec();
@@ -35,6 +26,17 @@ router.get('/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
+
+
+router.get('/', async (req, res) => {
+    try {
+        const pointTypes = await PointType.find().exec();
+        res.json(pointTypes);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
+    }
+});
+
 
 router.patch('/:id', async (req, res) => {
     try {

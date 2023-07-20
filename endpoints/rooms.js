@@ -14,15 +14,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.get('/', async (req, res) => {
-    try {
-        const rooms = await Room.find().populate('points').exec();
-        res.json(rooms);
-    } catch (error) {
-        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
-    }
-});
-
 router.get('/:id', async (req, res) => {
     try {
         const room = await Room.findById(req.params.id).populate('points').exec();
@@ -36,6 +27,17 @@ router.get('/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
+
+
+router.get('/', async (req, res) => {
+    try {
+        const rooms = await Room.find().populate('points').exec();
+        res.json(rooms);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
+    }
+});
+
 
 router.patch('/:id', async (req, res) => {
     try {

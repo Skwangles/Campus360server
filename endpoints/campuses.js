@@ -13,6 +13,20 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.get('/:id', async (req, res) => {
+    try {
+        const campus = await Campus.findById(req.params.id).exec();
+
+        if (!campus) {
+            return res.status(404).json({ error: 'Campus not found' });
+        }
+
+        res.json(campus);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
+    }
+});
+
 router.get('/', async (req, res) => {
     try {
         const { name } = req.query;
@@ -29,19 +43,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:id', async (req, res) => {
-    try {
-        const campus = await Campus.findById(req.params.id).exec();
 
-        if (!campus) {
-            return res.status(404).json({ error: 'Campus not found' });
-        }
-
-        res.json(campus);
-    } catch (error) {
-        res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
-    }
-});
 
 router.patch('/:id', async (req, res) => {
     try {
