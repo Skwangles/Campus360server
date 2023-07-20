@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from "react";
 
 interface Props {
   area: Area;
@@ -9,7 +9,10 @@ interface Props {
 function AreaView({ area, points, onCreatePoint }: Props) {
   const [creatingPoint, setCreatingPoint] = useState<boolean>(false);
   const [imagePosition, setImagePosition] = useState({ left: 0, top: 0 });
-  const [pointCoordinates, setPointCoordinates] = useState<{ x: number; y: number } | null>(null);
+  const [pointCoordinates, setPointCoordinates] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
   const [newPointData, setNewPointData] = useState<Partial<Point>>({});
   const imageRef = useRef<HTMLImageElement>(null);
 
@@ -51,7 +54,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
       };
       reader.readAsDataURL(selectedImage);
     }
-    
+
     setCreatingPoint(false);
     setPointCoordinates(null);
     setNewPointData({});
@@ -65,25 +68,61 @@ function AreaView({ area, points, onCreatePoint }: Props) {
         alt={area.name}
         onClick={handleImageClick}
         onLoad={handleImageLoad}
-        style={{ cursor: creatingPoint ? 'crosshair' : 'auto' }}
+        style={{ cursor: creatingPoint ? "crosshair" : "auto" }}
         ref={imageRef}
       />
 
-      {points.map((point) => (
-        <div
-          key={point._id}
-          style={{
-            position: 'absolute',
-            left: `${imagePosition.left + (point.x * imageRef.current?.offsetWidth) / 100}px`,
-            top: `${imagePosition.top + (point.y * imageRef.current?.offsetHeight) / 100}px`,
-          }}
-        >
-          {point.type.name}
-        </div>
-      ))}
+      {imageRef.current?.offsetHeight &&
+        imageRef.current
+          ?.offsetWidth /* Check there is actually an image to show over */ &&
+        points.map((point) => (
+          <div
+            key={point._id}
+            style={{
+              position: "absolute",
+              left: `${
+                imagePosition.left +
+                (point.x * imageRef.current?.offsetWidth) / 100
+              }px`,
+              top: `${
+                imagePosition.top +
+                (point.y * imageRef.current?.offsetHeight) / 100
+              }px`,
+            }}
+          >
+            {point.type.name}
+          </div>
+        ))}
 
-      {creatingPoint && pointCoordinates && ( // TODO: Add labels to each field
+      {imageRef.current?.offsetHeight &&
+        imageRef.current
+          ?.offsetWidth /* Check there is actually an image to show over */ &&
+        creatingPoint &&
+        pointCoordinates && (
+          // Create Point Dot
+          <div
+            style={{
+              position: "absolute",
+              left: `${
+                imagePosition.left +
+                (pointCoordinates.x * imageRef.current?.offsetWidth) / 100
+              }px`,
+              top: `${
+                imagePosition.top +
+                (pointCoordinates.y * imageRef.current?.offsetHeight) / 100
+              }px`,
+              width: "16px",
+              height: "16px",
+              borderRadius: "50%",
+              background: "red", // Change the color to your preference
+            }}
+          />
+        )}
+
+      {creatingPoint && pointCoordinates && (
+        // Create Point Form
         <div>
+          <div>Pan Offset</div>
           <input
             type="number"
             name="pan_offset"
@@ -91,6 +130,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
             onChange={handleInputChange}
             placeholder="Pan Offset"
           />
+          <div>Tilt Offset</div>
           <input
             type="number"
             name="tilt_offset"
@@ -98,36 +138,41 @@ function AreaView({ area, points, onCreatePoint }: Props) {
             onChange={handleInputChange}
             placeholder="Tilt Offset"
           />
+          <div>Zoom Offset</div>
           <input
             type="text"
             name="type"
-            value={newPointData.type?.name || ''} // TODO: Drop down select types from database types
+            value={newPointData.type?.name || ""} // TODO: Drop down select types from database types
             onChange={handleInputChange}
             placeholder="Type"
           />
-          <input
-            type="number"
-            name="x"
-            value={newPointData.x || pointCoordinates.x}
-            onChange={handleInputChange}
-            placeholder="X"
-          />
-          <input
-            type="number"
-            name="y"
-            value={newPointData.y || pointCoordinates.y}
-            onChange={handleInputChange}
-            placeholder="Y"
-          />
+          <div>Coordinates</div>
+          <div>
+            <div>X (%)</div>
+            <input
+              type="number"
+              name="x"
+              value={newPointData.x || pointCoordinates.x}
+              onChange={handleInputChange}
+              placeholder="X"
+            />
+            <div>Y (%)</div>
+            <input
+              type="number"
+              name="y"
+              value={newPointData.y || pointCoordinates.y}
+              onChange={handleInputChange}
+              placeholder="Y"
+            />
+          </div>
+          <div>Image</div>
           <input type="file" accept="image/*" onChange={handleImageUpload} />
-          <button onClick={handleCreatePoint}
-          //TODO: Test actually creates
-          >Create Point</button> 
+          <button onClick={handleCreatePoint}>Create Point</button>
         </div>
       )}
 
       <button onClick={() => setCreatingPoint(!creatingPoint)}>
-        {creatingPoint ? 'Cancel Creating Point' : 'Create Point'}
+        {creatingPoint ? "Cancel Creating Point" : "Create Point"}
       </button>
     </div>
   );
