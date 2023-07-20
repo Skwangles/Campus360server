@@ -12,13 +12,14 @@ app.use(cors())
 connectDB();
 
 // Middleware
-app.use(express.json());
-
-// Routes
-app.use('/', routes);
+app.use(express.json({ limit: '50mb', extended: true }));
+app.use(express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 
 // Serve Swagger UI
 app.use('/api-docs', serveSwaggerUI, setupSwaggerUI);
+
+// Routes
+app.use('/', routes);
 
 // Start the server
 app.listen(3000, () => {
