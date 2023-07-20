@@ -114,20 +114,17 @@ function AreaView({ area, points, onCreatePoint }: Props) {
             style={{
               position: "absolute",
               left: `${
-                (point.x * imageRef.current.offsetWidth) /
-                  imageRef.current.naturalWidth +
-                imagePosition.left
+                point.x * imageRef.current.offsetWidth + imagePosition.left
               }px`,
               top: `${
-                (point.y * imageRef.current.offsetHeight) /
-                  imageRef.current.naturalHeight +
-                imagePosition.top
+                point.y * imageRef.current.offsetHeight + imagePosition.top
               }px`,
               transform: "translate(-50%, -50%)",
               width: "16px",
               height: "16px",
               borderRadius: "50%",
-              background: "red", // Change the color to your preference
+              background: "blue",
+              color: "black",
             }}
           >
             {point.type.name}
