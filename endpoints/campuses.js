@@ -46,7 +46,17 @@ router.get('/:id', async (req, res) => {
 router.patch('/:id', async (req, res) => {
     try {
         const { name } = req.body;
-        const campus = await Campus.findByIdAndUpdate(req.params.id, { name }, { new: true }).exec();
+        const updateFields = {};
+
+        if (name) {
+            updateFields.name = name;
+        }
+
+        const campus = await Campus.findByIdAndUpdate(
+            req.params.id,
+            updateFields,
+            { new: true }
+        ).exec();
 
         if (!campus) {
             return res.status(404).json({ error: 'Campus not found' });
@@ -57,6 +67,7 @@ router.patch('/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
+
 
 router.delete('/:id', async (req, res) => {
     try {

@@ -40,7 +40,25 @@ router.get('/:id', async (req, res) => {
 router.patch('/:id', async (req, res) => {
     try {
         const { name, occupants, points } = req.body;
-        const room = await Room.findByIdAndUpdate(req.params.id, { name, occupants, points }, { new: true })
+        const updateFields = {};
+
+        if (name) {
+            updateFields.name = name;
+        }
+
+        if (occupants) {
+            updateFields.occupants = occupants;
+        }
+
+        if (points) {
+            updateFields.points = points;
+        }
+
+        const room = await Room.findByIdAndUpdate(
+            req.params.id,
+            updateFields,
+            { new: true }
+        )
             .populate('points')
             .exec();
 
@@ -53,6 +71,7 @@ router.patch('/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
+
 
 router.delete('/:id', async (req, res) => {
     try {

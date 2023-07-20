@@ -69,16 +69,42 @@ router.get('/:id', async (req, res) => {
 router.patch('/:id', async (req, res) => {
     try {
         const { imageId, pan_offset, tilt_offset, typeId, links, x, y, layout_imageId, campusId } = req.body;
+        const updateFields = {};
+
+        if (imageId) {
+            updateFields.image = imageId;
+        }
+        if (pan_offset) {
+            updateFields.pan_offset = pan_offset;
+        }
+        if (tilt_offset) {
+            updateFields.tilt_offset = tilt_offset;
+        }
+        if (typeId) {
+            updateFields.type = typeId;
+        }
+        if (links) {
+            updateFields.links = links;
+        }
+        if (x) {
+            updateFields.x = x;
+        }
+        if (y) {
+            updateFields.y = y;
+        }
+        if (layout_imageId) {
+            updateFields.layout_image = layout_imageId;
+        }
+
+        if (campusId) {
+            updateFields.campus = campusId;
+        }
+
         const point = await Point.findByIdAndUpdate(
             req.params.id,
-            { image: imageId, pan_offset, tilt_offset, type: typeId, links, x, y, layout_image: layout_imageId, campus: campusId },
+            updateFields,
             { new: true }
-        )
-            .populate('image')
-            .populate('type')
-            .populate('area')
-            .populate('campus')
-            .exec();
+        ).exec();
 
         if (!point) {
             return res.status(404).json({ error: 'Point not found' });
@@ -89,6 +115,7 @@ router.patch('/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
+
 
 router.delete('/:id', async (req, res) => {
     try {

@@ -5,8 +5,8 @@ const { Image, Point, Campus, PointType, Area, Room } = require('../models');
 // Image routes
 router.post('/', async (req, res) => {
     try {
-        const { name, base64 } = req.body;
-        const image = new Image({ name, base64 });
+        const { base64 } = req.body;
+        const image = new Image({ base64 });
         await image.save();
         res.status(201).json(image);
     } catch (error) {
@@ -16,7 +16,15 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
     try {
-        const images = await Image.find().exec();
+        const { base64 } = req.params;
+
+        // securely query only by specified params
+        const query = {};
+        if (base64) {
+            query.base64 = base64;
+        }
+
+        const images = await Image.find(query).exec();
         res.json(images);
     } catch (error) {
         res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
@@ -39,8 +47,18 @@ router.get('/:id', async (req, res) => {
 
 router.patch('/:id', async (req, res) => {
     try {
-        const { name, base64 } = req.body;
-        const image = await Image.findByIdAndUpdate(req.params.id, { name, base64 }, { new: true }).exec();
+        const { base64 } = req.body;
+        const updateFields = {};
+
+        if (base64) {
+            updateFields.base64 = base64;
+        }
+
+        const image = await Image.findByIdAndUpdate(
+            req.params.id,
+            updateFields,
+            { new: true }
+        ).exec();
 
         if (!image) {
             return res.status(404).json({ error: 'Image not found' });
@@ -51,6 +69,7 @@ router.patch('/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal server error: ' + JSON.stringify(error) });
     }
 });
+
 
 router.delete('/:id', async (req, res) => {
     try {
