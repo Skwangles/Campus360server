@@ -65,6 +65,29 @@ function App() {
     }
   }, [selectedArea]);
 
+  // Retrieve the selected campus and area from local storage during initialization
+  useEffect(() => {
+    const savedSelectedCampus = localStorage.getItem("selectedCampus");
+    const savedSelectedArea = localStorage.getItem("selectedArea");
+
+    if (savedSelectedCampus) {
+      setSelectedCampus(savedSelectedCampus);
+    }
+
+    if (savedSelectedArea) {
+      setSelectedArea(savedSelectedArea);
+    }
+  }, []);
+
+  // Save the selected campus and area to local storage whenever they change
+  useEffect(() => {
+    localStorage.setItem("selectedCampus", selectedCampus);
+  }, [selectedCampus]);
+
+  useEffect(() => {
+    localStorage.setItem("selectedArea", selectedArea);
+  }, [selectedArea]);
+
   const handleCampusChange = (campusId: string) => {
     setSelectedCampus(campusId);
     setSelectedArea("");
