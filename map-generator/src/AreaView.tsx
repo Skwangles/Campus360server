@@ -29,8 +29,8 @@ function AreaView({ area, points, onCreatePoint }: Props) {
   const handleImageClick = (event: React.MouseEvent<HTMLImageElement>) => {
     if (creatingPoint && imageRef.current) {
       const { left, top } = imageRef.current.getBoundingClientRect();
-      const x = ((event.clientX - left) / imageRef.current.offsetWidth) * 100;
-      const y = ((event.clientY - top) / imageRef.current.offsetHeight) * 100;
+      const x = (event.clientX - left) / imageRef.current.offsetWidth;
+      const y = (event.clientY - top) / imageRef.current.offsetHeight;
       setPointCoordinates({ x, y });
       setNewPointData({ ...newPointData, x, y });
     }
@@ -114,13 +114,20 @@ function AreaView({ area, points, onCreatePoint }: Props) {
             style={{
               position: "absolute",
               left: `${
-                imagePosition.left +
-                (point.x * imageRef.current?.offsetWidth) / 100
+                (point.x * imageRef.current.offsetWidth) /
+                  imageRef.current.naturalWidth +
+                imagePosition.left
               }px`,
               top: `${
-                imagePosition.top +
-                (point.y * imageRef.current?.offsetHeight) / 100
+                (point.y * imageRef.current.offsetHeight) /
+                  imageRef.current.naturalHeight +
+                imagePosition.top
               }px`,
+              transform: "translate(-50%, -50%)",
+              width: "16px",
+              height: "16px",
+              borderRadius: "50%",
+              background: "red", // Change the color to your preference
             }}
           >
             {point.type.name}
@@ -128,8 +135,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
         ))}
 
       {imageRef.current?.offsetHeight &&
-        imageRef.current
-          ?.offsetWidth /* Check there is actually an image to show over */ &&
+        imageRef.current?.offsetWidth &&
         creatingPoint &&
         pointCoordinates && (
           // Create Point Dot
@@ -137,13 +143,14 @@ function AreaView({ area, points, onCreatePoint }: Props) {
             style={{
               position: "absolute",
               left: `${
-                imagePosition.left +
-                (pointCoordinates.x * imageRef.current?.offsetWidth) / 100
+                pointCoordinates.x * imageRef.current.offsetWidth +
+                imagePosition.left
               }px`,
               top: `${
-                imagePosition.top +
-                (pointCoordinates.y * imageRef.current?.offsetHeight) / 100
+                pointCoordinates.y * imageRef.current.offsetHeight +
+                imagePosition.top
               }px`,
+              transform: "translate(-50%, -50%)",
               width: "16px",
               height: "16px",
               borderRadius: "50%",
@@ -178,7 +185,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
             <input
               type="number"
               name="x"
-              value={newPointData.x || pointCoordinates.x}
+              value={(newPointData.x || pointCoordinates.x) * 100}
               onChange={handleInputChange}
               placeholder="X"
             />
@@ -186,7 +193,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
             <input
               type="number"
               name="y"
-              value={newPointData.y || pointCoordinates.y}
+              value={(newPointData.y || pointCoordinates.y) * 100}
               onChange={handleInputChange}
               placeholder="Y"
             />
