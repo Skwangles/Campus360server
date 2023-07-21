@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { API } from "./constants";
+import Pano from "./Pano";
+import getBase64 from "./utils";
 interface Props {
   area: Area;
   points: Point[];
@@ -54,14 +56,9 @@ function AreaView({ area, points, onCreatePoint }: Props) {
     }
   };
 
-  const handleCreatePoint = () => {
+  const handleCreatePoint = async () => {
     if (selectedImage) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const base64Image = event.target?.result as string;
-        onCreatePoint(newPointData, base64Image);
-      };
-      reader.readAsDataURL(selectedImage);
+      onCreatePoint(newPointData, await getBase64(selectedImage));
     }
 
     setCreatingPoint(false);
@@ -197,6 +194,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
           </div>
           <div>Image</div>
           <input type="file" accept="image/*" onChange={handleImageUpload} />
+          <Pano file={selectedImage} />
           <button onClick={handleCreatePoint}>Create Point</button>
         </div>
       )}
