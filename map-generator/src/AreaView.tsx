@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { API } from "./constants";
 import Pano from "./Pano";
 import getBase64 from "./utils";
+import PanoramaViewer from "./PanoramaViewer";
 interface Props {
   area: Area;
   points: Point[];
@@ -194,7 +195,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
           </div>
           <div>Image</div>
           <input type="file" accept="image/*" onChange={handleImageUpload} />
-          <Pano file={selectedImage} />
+          {selectedImage && <PanoramaViewer file={selectedImage} />}
           <button onClick={handleCreatePoint}>Create Point</button>
         </div>
       )}
