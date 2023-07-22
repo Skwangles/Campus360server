@@ -75,27 +75,6 @@ function AreaView({ area, points, onCreatePoint }: Props) {
     setNewPointData({});
   };
 
-  // Render the dropdown select element for pointTypes
-  const renderPointTypeSelect = () => {
-    return (
-      <div>
-        <div>Point Types</div>
-        <select
-          name="type"
-          value={newPointData.type?.toString() || ""} // Use .toString() to compare ObjectId with string
-          onChange={handleInputChange}
-        >
-          <option value="">Select PointType</option>
-          {pointTypes.map((pointType) => (
-            <option key={pointType._id} value={pointType._id}>
-              {pointType.name}
-            </option>
-          ))}
-        </select>
-      </div>
-    );
-  };
-
   return (
     <>
       <img
@@ -146,7 +125,6 @@ function AreaView({ area, points, onCreatePoint }: Props) {
           handleInputChange={handleInputChange}
           handleImageUpload={handleImageUpload}
           handleCreatePoint={handleCreatePoint}
-          renderPointTypeSelect={renderPointTypeSelect}
         />
       )}
 
