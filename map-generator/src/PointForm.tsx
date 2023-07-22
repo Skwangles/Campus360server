@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PanoramaViewerWithSlider from "./PanoramaViewerWithSlider";
+import { API } from "./constants";
 
 interface PointFormProps {
   pointCoordinates: { x: number; y: number };
@@ -18,6 +19,16 @@ const PointForm: React.FC<PointFormProps> = ({
   handleImageUpload,
   handleCreatePoint,
 }) => {
+  const [pointTypes, setPointTypes] = useState<PointType[]>([]); // State to store the fetched pointTypes
+
+  useEffect(() => {
+    // Fetch the list of pointTypes when the component mounts
+    fetch(`${API}/pointTypes`) // Replace this URL with your server's API endpoint to fetch pointTypes
+      .then((response) => response.json())
+      .then((data) => setPointTypes(data))
+      .catch((error) => console.error("Error fetching pointTypes:", error));
+  }, []);
+
   // Render the dropdown select element for pointTypes
   const renderPointTypeSelect = () => {
     return (

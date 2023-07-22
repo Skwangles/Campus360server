@@ -20,16 +20,8 @@ function AreaView({ area, points, onCreatePoint }: Props) {
   const [newPointData, setNewPointData] = useState<Partial<Point>>({}); // Default values are handled by mongoose
 
   const [selectedImage, setSelectedImage] = useState<string>("");
-  const [pointTypes, setPointTypes] = useState<PointType[]>([]); // State to store the fetched pointTypes
-  const imageRef = useRef<HTMLImageElement>(null);
 
-  useEffect(() => {
-    // Fetch the list of pointTypes when the component mounts
-    fetch(`${API}/pointTypes`) // Replace this URL with your server's API endpoint to fetch pointTypes
-      .then((response) => response.json())
-      .then((data) => setPointTypes(data))
-      .catch((error) => console.error("Error fetching pointTypes:", error));
-  }, []);
+  const imageRef = useRef<HTMLImageElement>(null);
 
   const handleImageClick = (event: React.MouseEvent<HTMLImageElement>) => {
     if (creatingPoint && imageRef.current) {
