@@ -3,7 +3,7 @@ import axios from "axios";
 import CampusSelect from "./CampusSelect";
 import AreaSelect from "./AreaSelect";
 import AreaView from "./AreaView";
-import { API } from "./constants";
+import { API, DEFAULT_IMAGE } from "./constants";
 
 //TODO: Add CSS/Styling to whole thing
 function App() {
@@ -172,11 +172,8 @@ function App() {
     axios
       .post(`${API}/images`, newImage)
       .then((imageResponse) => {
-        // Get the created Image's _id
-        const imageId = imageResponse.data._id;
-
         // Assign the Image _id to the Point's image attribute
-        newPoint.image = imageId;
+        newPoint.image = imageResponse.data._id;
 
         // Create the Point
         axios
@@ -213,11 +210,11 @@ function App() {
           onCreateArea={handleCreateArea}
         />
       )}
-      {selectedImage && (
+      {selectedArea && selectedImage && (
         <AreaView
           area={{
             _id: selectedArea,
-            name: selectedArea,
+            name: "",
             image: selectedImage,
           }}
           onCreatePoint={onCreatePoint}
