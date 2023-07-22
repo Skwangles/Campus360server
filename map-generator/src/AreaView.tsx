@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { API } from "./constants";
-import Pano from "./Pano";
 import getBase64 from "./utils";
-import PanoramaViewer from "./PanoramaViewer";
+import PanoramaViewerWithSlider from "./PanoramaViewerWithSlider";
 interface Props {
   area: Area;
   points: Point[];
@@ -17,7 +16,8 @@ function AreaView({ area, points, onCreatePoint }: Props) {
     y: number;
   } | null>(null);
   const [newPointData, setNewPointData] = useState<Partial<Point>>({}); // Default values are handled by mongoose
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [newPointDirection, setNewPointDirection] = useState<number>(0);
+  const [selectedImage, setSelectedImage] = useState<string>("");
   const [pointTypes, setPointTypes] = useState<PointType[]>([]); // State to store the fetched pointTypes
   const imageRef = useRef<HTMLImageElement>(null);
 
@@ -40,8 +40,14 @@ function AreaView({ area, points, onCreatePoint }: Props) {
   };
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setSelectedImage(e.target.files[0]);
+    if (e.target?.files && e.target?.files.length > 0) {
+      getBase64(e.target?.files[0])
+        .then((base64) => {
+          setSelectedImage(base64);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
@@ -59,7 +65,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
 
   const handleCreatePoint = async () => {
     if (selectedImage) {
-      onCreatePoint(newPointData, await getBase64(selectedImage));
+      onCreatePoint(newPointData, selectedImage);
     }
 
     setCreatingPoint(false);
@@ -89,7 +95,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
   };
 
   return (
-    <div>
+    <>
       <h2>{area.name}</h2>
       <img
         src={area.image.base64}
@@ -109,6 +115,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
         points.map((point) => (
           <div
             key={point._id}
+            onClick={() => console.log(point)}
             style={{
               position: "absolute",
               left: `${
@@ -161,7 +168,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
           <input
             type="number"
             name="pan_offset"
-            value={newPointData.pan_offset || 0}
+            value={newPointDirection || newPointData.pan_offset || 0}
             onChange={handleInputChange}
             placeholder="Pan Offset"
           />
@@ -195,7 +202,13 @@ function AreaView({ area, points, onCreatePoint }: Props) {
           </div>
           <div>Image</div>
           <input type="file" accept="image/*" onChange={handleImageUpload} />
-          {selectedImage && <PanoramaViewer file={selectedImage} />}
+          {selectedImage && selectedImage !== "" && (
+            <PanoramaViewerWithSlider
+              selectedImage={selectedImage}
+              setDirection={setNewPointDirection}
+              direction={newPointDirection}
+            />
+          )}
           <button onClick={handleCreatePoint}>Create Point</button>
         </div>
       )}
@@ -203,7 +216,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
       <button onClick={() => setCreatingPoint(!creatingPoint)}>
         {creatingPoint ? "Cancel Creating Point" : "Create Point"}
       </button>
-    </div>
+    </>
   );
 }
 
