@@ -18,7 +18,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
     y: number;
   } | null>(null);
   const [newPointData, setNewPointData] = useState<Partial<Point>>({}); // Default values are handled by mongoose
-  const [newPointDirection, setNewPointDirection] = useState<number>(0);
+
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [pointTypes, setPointTypes] = useState<PointType[]>([]); // State to store the fetched pointTypes
   const imageRef = useRef<HTMLImageElement>(null);
@@ -65,7 +65,7 @@ function AreaView({ area, points, onCreatePoint }: Props) {
     }
   };
 
-  const handleCreatePoint = async () => {
+  const handleCreatePoint = () => {
     if (selectedImage) {
       onCreatePoint(newPointData, selectedImage);
     }
@@ -143,7 +143,6 @@ function AreaView({ area, points, onCreatePoint }: Props) {
           pointCoordinates={pointCoordinates}
           newPointData={newPointData}
           selectedImage={selectedImage}
-          newPointDirection={newPointDirection}
           handleInputChange={handleInputChange}
           handleImageUpload={handleImageUpload}
           handleCreatePoint={handleCreatePoint}

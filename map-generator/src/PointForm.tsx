@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import PanoramaViewerWithSlider from "./PanoramaViewerWithSlider";
 
 interface PointFormProps {
   pointCoordinates: { x: number; y: number };
   newPointData: Partial<Point>;
   selectedImage: string;
-  newPointDirection: number;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleImageUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleCreatePoint: () => void;
@@ -16,12 +15,12 @@ const PointForm: React.FC<PointFormProps> = ({
   pointCoordinates,
   newPointData,
   selectedImage,
-  newPointDirection,
   handleInputChange,
   handleImageUpload,
   handleCreatePoint,
   renderPointTypeSelect,
 }) => {
+  const [newPointDirection, setNewPointDirection] = useState<number>(0);
   return (
     <div>
       <div>Pan Offset</div>
