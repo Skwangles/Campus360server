@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { API } from "./constants";
 import getBase64 from "./utils";
-import PanoramaViewerWithSlider from "./PanoramaViewerWithSlider";
+import PointDot from "./PointDot";
+import PointForm from "./PointForm";
+
 interface Props {
   area: Area;
   points: Point[];
@@ -96,7 +98,6 @@ function AreaView({ area, points, onCreatePoint }: Props) {
 
   return (
     <>
-      <h2>{area.name}</h2>
       <img
         src={area.image.base64}
         alt={area.name}
@@ -113,27 +114,13 @@ function AreaView({ area, points, onCreatePoint }: Props) {
         imageRef.current
           ?.offsetWidth /* Check there is actually an image to show over */ &&
         points.map((point) => (
-          <div
+          <PointDot
             key={point._id}
-            onClick={() => console.log(point)}
-            style={{
-              position: "absolute",
-              left: `${
-                point.x * imageRef.current.offsetWidth + imagePosition.left
-              }px`,
-              top: `${
-                point.y * imageRef.current.offsetHeight + imagePosition.top
-              }px`,
-              transform: "translate(-50%, -50%)",
-              width: "16px",
-              height: "16px",
-              borderRadius: "50%",
-              background: "blue",
-              color: "black",
-            }}
-          >
-            {point.type.name}
-          </div>
+            point={point}
+            imagePosition={imagePosition}
+            imageRef={imageRef}
+            colour="blue"
+          />
         ))}
 
       {imageRef.current?.offsetHeight &&
@@ -141,76 +128,27 @@ function AreaView({ area, points, onCreatePoint }: Props) {
         creatingPoint &&
         pointCoordinates && (
           // Create Point Dot
-          <div
-            style={{
-              position: "absolute",
-              left: `${
-                pointCoordinates.x * imageRef.current.offsetWidth +
-                imagePosition.left
-              }px`,
-              top: `${
-                pointCoordinates.y * imageRef.current.offsetHeight +
-                imagePosition.top
-              }px`,
-              transform: "translate(-50%, -50%)",
-              width: "16px",
-              height: "16px",
-              borderRadius: "50%",
-              background: "red", // Change the color to your preference
-            }}
+          <PointDot
+            key={"newPoint"}
+            point={pointCoordinates}
+            imagePosition={imagePosition}
+            imageRef={imageRef}
+            colour="red"
           />
         )}
 
       {creatingPoint && pointCoordinates && (
         // Create Point Form
-        <div>
-          <div>Pan Offset</div>
-          <input
-            type="number"
-            name="pan_offset"
-            value={newPointDirection || newPointData.pan_offset || 0}
-            onChange={handleInputChange}
-            placeholder="Pan Offset"
-          />
-          <div>Tilt Offset</div>
-          <input
-            type="number"
-            name="tilt_offset"
-            value={newPointData.tilt_offset || 0}
-            onChange={handleInputChange}
-            placeholder="Tilt Offset"
-          />
-          {renderPointTypeSelect()} {/* Render the dropdown select element */}
-          <div>Coordinates</div>
-          <div>
-            <div>X (%)</div>
-            <input
-              type="number"
-              name="x"
-              value={(newPointData.x || pointCoordinates.x) * 100}
-              onChange={handleInputChange}
-              placeholder="X"
-            />
-            <div>Y (%)</div>
-            <input
-              type="number"
-              name="y"
-              value={(newPointData.y || pointCoordinates.y) * 100}
-              onChange={handleInputChange}
-              placeholder="Y"
-            />
-          </div>
-          <div>Image</div>
-          <input type="file" accept="image/*" onChange={handleImageUpload} />
-          {selectedImage && selectedImage !== "" && (
-            <PanoramaViewerWithSlider
-              selectedImage={selectedImage}
-              setDirection={setNewPointDirection}
-              direction={newPointDirection}
-            />
-          )}
-          <button onClick={handleCreatePoint}>Create Point</button>
-        </div>
+        <PointForm
+          pointCoordinates={pointCoordinates}
+          newPointData={newPointData}
+          selectedImage={selectedImage}
+          newPointDirection={newPointDirection}
+          handleInputChange={handleInputChange}
+          handleImageUpload={handleImageUpload}
+          handleCreatePoint={handleCreatePoint}
+          renderPointTypeSelect={renderPointTypeSelect}
+        />
       )}
 
       <button onClick={() => setCreatingPoint(!creatingPoint)}>
